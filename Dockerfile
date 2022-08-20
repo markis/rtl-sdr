@@ -1,13 +1,17 @@
 FROM alpine:3.6
 
-RUN apk add --no-cache musl-dev gcc make cmake pkgconf git libusb-dev
+ARG repo=git://git.osmocom.org/rtl-sdr.git
+ARG clone_dir=/src
 
-WORKDIR /usr/local/
-RUN git clone git://git.osmocom.org/rtl-sdr.git
+RUN \
+  apk add --no-cache --virtual build-dependencies \
+    musl-dev gcc make cmake pkgconf git libusb-dev build-base \
+  && git clone --depth=1 ${repo} ${clone_dir} \
+  && cd ${clone_dir} \
+  && cmake ${clone_dir} -DDETACH_KERNEL_DRIVER=ON \
+  && make \
+  && make install \
+  && rm -rf ${clone_dir} \
+  && apk del build-dependencies
 
-RUN mkdir /usr/local/rtl-sdr/build
-WORKDIR /usr/local/rtl-sdr/build
-RUN cmake ../ -DDETACH_KERNEL_DRIVER=ON
-RUN make
-RUN make install
-
+ENTRYPOINT /usr/local/bin/rtl_tcp
