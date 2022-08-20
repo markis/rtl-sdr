@@ -5,7 +5,8 @@ ARG clone_dir=/src
 
 RUN \
   apk add --no-cache --virtual build-dependencies \
-    musl-dev gcc make cmake pkgconf git libusb-dev build-base \
+    musl-dev gcc make cmake pkgconf git build-base \
+  && apk add --no-cache libusb-dev \
   && git clone --depth=1 ${repo} ${clone_dir} \
   && cd ${clone_dir} \
   && cmake ${clone_dir} -DDETACH_KERNEL_DRIVER=ON \
