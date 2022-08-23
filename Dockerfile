@@ -15,4 +15,4 @@ RUN \
   && rm -rf ${clone_dir} \
   && apk del build-dependencies
 
-ENTRYPOINT /usr/local/bin/rtl_tcp
+CMD /usr/local/bin/rtl_tcp
