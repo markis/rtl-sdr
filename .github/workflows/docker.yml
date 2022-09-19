@@ -3,7 +3,7 @@ name: 'build images'
 
 on:
   schedule:
-    - cron: "* * * * 0"
+    - cron: "0 8 * * 1"
   push:
     branches:
       - master
